@@ -25,10 +25,12 @@ app.get('/nilai', (req, res) => {
 	        console.log(resultData);
 	    });
 	});
-	request.write(querystring.stringify({
-	    'userid': userid,
-	    'mapel': mapel
-	}));
+	let formData = querystring.stringify({
+                   	    'userid': userid,
+                   	    'mapel': mapel
+                   	});
+	request.write(formData);
+	console.log('writing', formData);
 	request.end();
 });
 
