@@ -55,23 +55,17 @@
       }
     });
     function next() {
-      let nis;
-      for (let i = 0; i < fetchTotal; i++) {
-        nis = '1819X'+pad(index++, 3);
+      for (let i = 0; i < 430; i++) {
+        let nis = '1819X'+pad(index, 3);
         fetchNilai(nis, mataPelajaran, result => {
           masukan(nis, result);
           count();
         });
+        index++;
         if (index > 430) {
           return;
         }
       }
-      nis = '1819X'+pad(index++, 3);
-      fetchNilai(nis, mataPelajaran, result => {
-        masukan(nis, result);
-        count();
-        next();
-      });
     }
 
     function count() {
