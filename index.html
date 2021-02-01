@@ -2,6 +2,24 @@
   <head>
     <title>Leaderboard Try Out</title>
   </head>
+  <script>
+    let data = "https://cbtsman1banjar.my.id/wp-content/themes/unbk/nilai.php";
+    function fetch(userid, mapel, callback) {
+      fetch(data, {
+        headers: {
+              "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+        method: "POST", body: 'userid='+userid+'&mapel='+mapel
+      }).then(res => {
+        res.text().then(text => {
+          let temp = document.createElement('temporary');
+          temp.innerHTML = text;
+          let result = temp.querySelector('table > tbody > tr:last-child > td:last-child').innerText;
+          callback.accept(result);
+        });
+      });
+    }
+  </script>
   <body>
     <h1>Papan Peringkat Try Out SMAN 1 Banjar</h1>
   </body>
