@@ -2,6 +2,7 @@ const express = require('express');
 const https = require('https');
 const app = express();
 const port = process.env.PORT || 5000;
+const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
@@ -22,4 +23,4 @@ app.get('/nilai', (req, res) => {
 	request.end();
 });
 
-app.listen(port, () => console.log(`Application listening on port ${port}!`))
+app.listen(server_host, port, () => console.log(`Application listening on port ${port}!`))
