@@ -29,42 +29,72 @@
     let table;
     let th;
     let index = 1;
+    let fetchTotal = 100;
+    let mataPelajaran;
+    let total = 0;
     document.addEventListener("DOMContentLoaded", () => {
       table = document.getElementById('tabel');
-      next();
+      mataPelajaran = getParameterByName('mapel');
+      total = getParameterByName('max');
+      if (!total) total = 100;
+      for (let i = 0; i < total; i++) {
+        let row = table.tBodies[0].insertRow();
+        let cell0 = row.insertCell();
+        cell0.innerHTML = i+1;
+        row.id = 'row-'+i;
+        let cell = row.insertCell();
+        cell.id = 'cell-nama';
+        let cell2 = row.insertCell();
+        cell2.id = 'cell-nilai';
+      }
+      if (mataPelajaran) {
+        next();
+      }
     });
     function next() {
-      let nis = '1819X'+pad(index, 3);
-      console.log('Fetching '+nis);
-      fetchNilai(nis, 'SENI BUDAYA', result => {
+      let nis;
+      for (let i = 0; i < fetchTotal; i++) {
+        if (index >= 431) return;
+        nis = '1819X'+pad(index++, 3);
+        fetchNilai(nis, mataPelajaran, result => {
+          masukan(nis, result);
+        });
+      }
+      nis = '1819X'+pad(index++, 3);
+      fetchNilai(nis, mataPelajaran, result => {
         masukan(nis, result);
         next();
       });
-      index++;
     }
+
+    let DATA = [];
+
     function masukan(nama, nilai) {
-      let row = table.tBodies[0].insertRow();
-      let namaCell = row.insertCell();
-      namaCell.innerHTML = nama;
-      let nilaiCell = row.insertCell();
-      nilaiCell.innerHTML = nilai;
-      sortTable(1, true);
+      DATA.push([nama, nilai]);
+      render();
     }
-    function sortTable(col, reverse) {
-        var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
-            tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
-            i;
-        reverse = -((+reverse) || -1);
-        tr = tr.sort(function (a, b) { // sort rows
-            return reverse // `-1 *` if want opposite order
-                * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
-                    .localeCompare(b.cells[col].textContent.trim())
-                   );
-        });
-        for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
+    function render() {
+      DATA.sort((a, b) => b[1] - a[1]);
+      for (let i = 0; i < total && i < DATA.length; i++) {
+        let row = document.querySelector('#row-'+i);
+        let nama = row.querySelector('#cell-nama');
+        let nilai = row.querySelector('#cell-nilai');
+        nama.innerHTML = DATA[i][0];
+        nilai.innerHTML = DATA[i][1];
+      }
+    }
+    function getParameterByName(name, url = window.location.href) {
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
   </script>
   <style>
+    body {
+    }
     .content {
       margin: 20;
     }
@@ -80,9 +110,12 @@
   </style>
   <body>
     <div class="header">Papan Peringkat Try Out SMAN 1 Banjar</div>
+    <div id="mapel"></div>
+    <div id="proses"></div>
     <table id="tabel" class="content">
       <thead>
         <tr>
+          <th>Peringkat</th>
           <th>NIS</th>
           <th>Skor</th>
         </tr>
