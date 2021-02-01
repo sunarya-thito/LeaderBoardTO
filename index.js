@@ -15,11 +15,13 @@ app.get('/nilai', (req, res) => {
 		method: 'POST'
 	};
 	let request = https.request(options, result => {
+	    console.log('status: '+result.status);
+	    console.log('HEADERS: ' + JSON.stringify(result.headers));
 	    res.on('data', data => {
 	        console.log(data);
 	    });
 	});
-	request.write('userid='+userid+'&mapel='+mapel);
+	request.write('userid: '+userid+'\nmapel: '+mapel);
 	request.end();
 });
 
