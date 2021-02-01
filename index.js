@@ -11,7 +11,7 @@ app.get('/nilai', (req, res) => {
 	let options = {
 		hostname: 'cbtsman1banjar.my.id',
 		port: 443,
-		path: 'wp-content/themes/unbk/nilai.php',
+		path: '/wp-content/themes/unbk/nilai.php',
 		method: 'POST'
 	};
 	let request = https.request(options, result => {
