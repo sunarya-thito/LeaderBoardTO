@@ -18,11 +18,13 @@ app.get('/nilai', (req, res) => {
 	    console.log('status: '+result);
 	    console.log('HEADERS: ' + JSON.stringify(result.headers));
 	    const chunks = [];
-	    res.on('data', data => {
+	    result.on('data', data => {
 	        chunks.push(data);
+	        console.log('pusing data: '+data);
 	    });
-	    res.on('end', () => {
+	    result.on('end', () => {
 	        const result = Buffer.concat(chunks).toString();
+	        console.log('data done: '+data);
 	        console.log(result);
 	    });
 	});
