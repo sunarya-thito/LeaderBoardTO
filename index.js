@@ -36,6 +36,7 @@ app.get('/nilai', (req, res) => {
 	                cache[userid] = {mapel: resultData}
 	            }
 	        }
+	        res.setHeader('Content-Type', 'text/plain');
 	        res.send(resultData);
 	    });
 	});
