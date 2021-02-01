@@ -12,8 +12,10 @@
         res.text().then(text => {
           let temp = document.createElement('temporary');
           temp.innerHTML = text;
-          let result = temp.ownText;
-          callback.accept(result);
+          let result = $(temp).contents().filter(function() {
+            return this.nodeType == Node.TEXT_NODE;
+          }).text();
+          callback(result);
         });
       });
     }
