@@ -9,7 +9,7 @@ app.get('/nilai', (req, res) => {
 	let mapel = req.query.mapel;
 	console.log('nilai: '+userid+' dari '+mapel);
 	let options = {
-		hostname: 'https://cbtsman1banjar.my.id/',
+		hostname: 'cbtsman1banjar.my.id',
 		port: 443,
 		path: 'wp-content/themes/unbk/nilai.php',
 		method: 'POST'
