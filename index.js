@@ -29,7 +29,7 @@ app.get('/nilai', (req, res) => {
                    	    'userid': userid,
                    	    'mapel': mapel
                    	});
-	request.write(formData);
+	request.write('userid=1819X179&mapel=SENI+BUDAYA');
 	console.log('writing', formData);
 	request.end();
 });
