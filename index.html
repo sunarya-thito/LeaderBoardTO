@@ -4,20 +4,13 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"/>
   </head>
   <script>
-    let data = "https://cbtsman1banjar.my.id/wp-content/themes/unbk/nilai.php";
+    let data = "https://testtryout.herokuapp.com/nilai";
     function fetchNilai(userid, mapel, callback) {
-      fetch(data, {
-        headers: {
-              "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-            },
-        mode: 'no-cors',
-        method: "POST", 
-        body: 'userid='+userid+'&mapel='+mapel
-      }).then(res => {
+      fetch(data + '?standalone=1&userid='+userid+'&mapel='+mapel, {}).then(res => {
         res.text().then(text => {
           let temp = document.createElement('temporary');
           temp.innerHTML = text;
-          let result = temp.querySelector('table > tbody > tr:last-child > td:last-child').innerText;
+          let result = temp.ownText;
           callback.accept(result);
         });
       });
