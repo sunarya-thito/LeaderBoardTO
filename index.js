@@ -9,7 +9,6 @@ app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
 	console.log('nilai: '+userid+' dari '+mapel);
-	        const result = Buffer.concat(chunks).toString();
 //	let options = {
 //		hostname: 'cbtsman1banjar.my.id',
 //		port: 443,
