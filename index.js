@@ -42,6 +42,7 @@ app.get('/nilai', (req, res) => {
 	    });
 	});
 	request.setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+	request.setHeader('Access-Control-Allow-Origin', '*');
 	request.write(formData);
 	request.end();
 });
