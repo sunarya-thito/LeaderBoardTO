@@ -10,7 +10,6 @@ const cache = {};
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
-	console.log('nilai: '+userid+' dari '+mapel);
 	let formData = querystring.stringify({
                        	    'userid': userid,
                        	    'mapel': mapel,
@@ -38,7 +37,6 @@ app.get('/nilai', (req, res) => {
 	            }
 	        }
 	        res.send(resultData);
-	        console.log(resultData);
 	    });
 	});
 	request.setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
