@@ -4,11 +4,13 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   </head>
   <script>
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+        v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+        )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
     let data = "https://testtryout.herokuapp.com/nilai";
     function fetchNilai(userid, mapel, callback) {
-      fetch(data + '?userid='+userid+'&mapel='+mapel, {
-        mode: 'no-cors'
-      }).then(res => {
+      fetch(data + '?userid='+userid+'&mapel='+mapel, {}).then(res => {
         res.text().then(text => {
           let temp = document.createElement('temporary');
           temp.innerHTML = text;
@@ -19,8 +21,75 @@
         });
       });
     }
+    function pad(num, size) {
+      num = num.toString();
+      while (num.length < size) num = "0" + num;
+      return num;
+    }
+    let table;
+    let th;
+    let index = 1;
+    document.addEventListener("DOMContentLoaded", () => {
+      table = document.getElementById('tabel');
+      next();
+    });
+    function next() {
+      let nis = '1819X'+pad(index, 3);
+      console.log('Fetching '+nis);
+      fetchNilai(nis, 'SENI BUDAYA', result => {
+        masukan(nis, result);
+        next();
+      });
+      index++;
+    }
+    function masukan(nama, nilai) {
+      let row = table.tBodies[0].insertRow();
+      let namaCell = row.insertCell();
+      namaCell.innerHTML = nama;
+      let nilaiCell = row.insertCell();
+      nilaiCell.innerHTML = nilai;
+      sortTable(1, true);
+    }
+    function sortTable(col, reverse) {
+        var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
+            tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
+            i;
+        reverse = -((+reverse) || -1);
+        tr = tr.sort(function (a, b) { // sort rows
+            return reverse // `-1 *` if want opposite order
+                * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
+                    .localeCompare(b.cells[col].textContent.trim())
+                   );
+        });
+        for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
+    }
   </script>
+  <style>
+    .content {
+      margin: 20;
+    }
+    .table-nama, .table-nilai {
+      padding: 5 10;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 15px;
+    }
+  </style>
   <body>
-    <h1>Papan Peringkat Try Out SMAN 1 Banjar</h1>
+    <div class="header">Papan Peringkat Try Out SMAN 1 Banjar</div>
+    <table id="tabel" class="content">
+      <thead>
+        <tr>
+          <th>NIS</th>
+          <th>Skor</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
   </body>
 </html>

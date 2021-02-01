@@ -10,6 +10,15 @@ const cache = {};
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
+	let alreadyCached = cache[userid];
+	if (alreadyCached) {
+	    let cachedValue = alreadyCached[mapel];
+	    if (cachedValue) {
+	        res.setHeader('Access-Control-Allow-Origin', '*');
+            res.send(cachedValue);
+	        return;
+	    }
+	}
 	let formData = querystring.stringify({
                        	    'userid': userid,
                        	    'mapel': mapel,
@@ -36,7 +45,6 @@ app.get('/nilai', (req, res) => {
 	                cache[userid] = {mapel: resultData}
 	            }
 	        }
-	        res.setHeader('Content-Type', 'text/plain');
 	        res.setHeader('Access-Control-Allow-Origin', '*');
 	        res.send(resultData);
 	    });
