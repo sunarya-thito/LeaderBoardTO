@@ -21,8 +21,10 @@ app.get('/nilai', (req, res) => {
 	    },
 	    method: 'POST'
 	}, (error, result, body) => {
-	    console.log('result');
-	    console.log(body.text());
+	    console.log('out:');
+	    if (error) console.log('error', error);
+	    if (result) console.log('result', result);
+	    if (body) console.log('body', body);
 	});
 });
 
