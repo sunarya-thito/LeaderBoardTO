@@ -22,6 +22,7 @@ app.get('/nilai', (req, res) => {
 	    });
 	    result.on('end', () => {
 	        const resultData = Buffer.concat(chunks).toString();
+	        console.log(resultData);
 	    });
 	});
 	request.write(querystring.stringify({
