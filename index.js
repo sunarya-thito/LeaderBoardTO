@@ -23,4 +23,4 @@ app.get('/nilai', (req, res) => {
 	request.end();
 });
 
-app.listen(server_host, port, () => console.log(`Application listening on port ${port}!`))
+app.listen(port, server_host, () => console.log(`Application listening on port ${port}!`))
