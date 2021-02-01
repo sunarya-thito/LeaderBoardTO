@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
 const cache = {};
+const cacheUsername = {};
 
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;

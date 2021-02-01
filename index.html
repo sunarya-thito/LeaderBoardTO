@@ -32,9 +32,12 @@
     let fetchTotal = 100;
     let mataPelajaran;
     let total = 0;
+    let doneCount = 0;
     document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector('#proses').innerHTML = 'Sedang memproses data...';
       table = document.getElementById('tabel');
       mataPelajaran = getParameterByName('mapel');
+      document.querySelector('#mapel').innerHTML = 'Mata Pelajaran: '+mataPelajaran;
       total = getParameterByName('max');
       if (!total) total = 100;
       for (let i = 0; i < total; i++) {
@@ -54,17 +57,30 @@
     function next() {
       let nis;
       for (let i = 0; i < fetchTotal; i++) {
-        if (index >= 431) return;
         nis = '1819X'+pad(index++, 3);
         fetchNilai(nis, mataPelajaran, result => {
           masukan(nis, result);
+          count();
         });
+        if (index >= 430) {
+          return;
+        }
       }
       nis = '1819X'+pad(index++, 3);
       fetchNilai(nis, mataPelajaran, result => {
         masukan(nis, result);
+        count();
         next();
       });
+    }
+
+    function count() {
+      doneCount++;
+      if (doneCount >= 430) {
+        document.querySelector('#proses').innerHTML = '';
+      } else {
+        document.querySelector('#proses').innerHTML = 'Sedang memproses data... ('+doneCount+'/'+430+')';
+      }
     }
 
     let DATA = [];
@@ -98,9 +114,6 @@
     .content {
       margin: 20;
     }
-    .table-nama, .table-nilai {
-      padding: 5 10;
-    }
     table, th, td {
       border: 1px solid black;
     }
@@ -109,8 +122,8 @@
     }
   </style>
   <body>
-    <div class="header">Papan Peringkat Try Out SMAN 1 Banjar</div>
-    <div id="mapel"></div>
+    <h1 class="header">Papan Peringkat Try Out SMAN 1 Banjar</h1>
+    <h3 id="mapel"></h3>
     <div id="proses"></div>
     <table id="tabel" class="content">
       <thead>
