@@ -1,11 +1,12 @@
 const express = require('express');
 const https = require('https');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 5000;
 
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
+	console.log('nilai: '+userid+' dari '+mapel);
 	let options = {
 		hostname: 'https://cbtsman1banjar.my.id/',
 		port: 443,
