@@ -15,7 +15,7 @@ app.get('/nilai', (req, res) => {
 		method: 'POST'
 	};
 	let request = https.request(options, result => {
-	    console.log('status: '+result.status);
+	    console.log('status: '+result);
 	    console.log('HEADERS: ' + JSON.stringify(result.headers));
 	    res.on('data', data => {
 	        console.log(data);
