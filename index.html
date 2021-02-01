@@ -13,6 +13,7 @@
         let mapel = [];
         for (let i in temp.childNodes) {
           let child = temp.childNodes[i];
+          console.log(child);
           mapel.push(child.getAttribute('value'));
         }
         callback(mapel);

@@ -12,7 +12,7 @@ app.get('/mapel', (req, res) => {
 	let options = {
 		hostname: 'cbtsman1banjar.my.id',
 		port: 443,
-		path: '/wp-content/themes/unbk/nilai.php',
+		path: '/wp-content/themes/unbk/api-18575621/getmapel.php',
 		method: 'GET'
 	};
 	let request = https.request(options, result => {
