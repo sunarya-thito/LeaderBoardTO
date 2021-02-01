@@ -1,98 +1,122 @@
 <html>
-  <head>
+<head>
     <title>Leaderboard Try Out</title>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  </head>
-  <script>
-    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-        v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-        )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-    let data = "https://testtryout.herokuapp.com/nilai";
-    function fetchNilai(userid, mapel, callback) {
-      fetch(data + '?userid='+userid+'&mapel='+mapel, {}).then(res => {
-        res.text().then(text => {
-          let temp = document.createElement('temporary');
-          temp.innerHTML = text;
-          let result = $(temp).contents().filter(function() {
-            return this.nodeType == Node.TEXT_NODE;
-          }).text();
-          callback(result);
-        });
+</head>
+<script>
+    function fetchPelajaran(callback) {
+      fetch('https://testtryout.herokuapp.com/mapel', {})
+      .then(res => res.text())
+      .then(res => {
+        let temp = document.createElement('temporary');
+        temp.innerHTML = res;
+        let mapel = [];
+        for (let i in temp.childNodes) {
+          let child = temp.childNodes[i];
+          mapel.push(child.getAttribute('value'));
+        }
+        callback(mapel);
       });
     }
-    function pad(num, size) {
-      num = num.toString();
-      while (num.length < size) num = "0" + num;
-      return num;
+    function fetchNilai(userid, mapel, callback) {
+        fetch('https://testtryout.herokuapp.com/nilai?userid=' + userid + '&mapel=' + mapel, {}).then(res => {
+            res.text().then(text => {
+                let temp = document.createElement('temporary');
+                temp.innerHTML = text;
+                let result = $(temp).contents().filter(function () {
+                    return this.nodeType == Node.TEXT_NODE;
+                }).text();
+                callback(result);
+            });
+        });
     }
+
+    function pad(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
+    }
+
     let table;
-    let th;
     let index = 1;
-    let fetchTotal = 100;
     let mataPelajaran;
     let total = 0;
     let doneCount = 0;
+
     document.addEventListener("DOMContentLoaded", () => {
-      document.querySelector('#proses').innerHTML = 'Sedang memproses data...';
-      table = document.getElementById('tabel');
-      mataPelajaran = getParameterByName('mapel');
-      document.querySelector('#mapel').innerHTML = 'Mata Pelajaran: '+mataPelajaran;
-      total = getParameterByName('max');
-      if (!total) total = 100;
-      for (let i = 0; i < total; i++) {
-        let row = table.tBodies[0].insertRow();
-        let cell0 = row.insertCell();
-        cell0.innerHTML = i+1;
-        row.id = 'row-'+i;
-        let cell = row.insertCell();
-        cell.id = 'cell-nama';
-        let cell2 = row.insertCell();
-        cell2.id = 'cell-nilai';
-      }
-      if (mataPelajaran) {
-        next();
-      }
-    });
-    function next() {
-      for (let i = 0; i < 430; i++) {
-        let nis = '1819X'+pad(index, 3);
-        fetchNilai(nis, mataPelajaran, result => {
-          masukan(nis, result);
-          count();
-        });
-        index++;
-        if (index > 430) {
-          return;
+        document.querySelector('#proses').innerHTML = 'Sedang memproses data...';
+        table = document.getElementById('tabel');
+        mataPelajaran = getParameterByName('mapel');
+        document.querySelector('#mapel').innerHTML = 'Mata Pelajaran: ' + mataPelajaran;
+        total = getParameterByName('max');
+        if (!total) total = 430;
+        for (let i = 0; i < total; i++) {
+            let row = table.tBodies[0].insertRow();
+            let cell0 = row.insertCell();
+            cell0.id = 'cell-peringkat';
+            row.id = 'row-' + i;
+            let cell = row.insertCell();
+            cell.id = 'cell-nama';
+            let cell2 = row.insertCell();
+            cell2.id = 'cell-nilai';
         }
-      }
+        if (mataPelajaran) {
+            next();
+        }
+    });
+
+    function next() {
+        for (let i = 0; i < 430; i++) {
+            let nis = '1819X' + pad(index, 3);
+            fetchNilai(nis, mataPelajaran, result => {
+                masukan(nis, result);
+                count();
+            });
+            index++;
+            if (index > 430) {
+                return;
+            }
+        }
     }
 
     function count() {
-      doneCount++;
-      if (doneCount >= 430) {
-        document.querySelector('#proses').innerHTML = '';
-      } else {
-        document.querySelector('#proses').innerHTML = 'Sedang memproses data... ('+doneCount+'/'+430+')';
-      }
+        doneCount++;
+        if (doneCount >= 430) {
+            document.querySelector('#proses').innerHTML = '';
+        } else {
+            document.querySelector('#proses').innerHTML = 'Sedang memuat data... (1819X' + doneCount + '/1819X' + 430 + ')';
+        }
     }
 
     let DATA = [];
 
     function masukan(nama, nilai) {
-      DATA.push([nama, nilai]);
-      render();
+        DATA.push([nama, nilai]);
+        render();
     }
+
     function render() {
-      DATA.sort((a, b) => b[1] - a[1]);
-      for (let i = 0; i < total && i < DATA.length; i++) {
-        let row = document.querySelector('#row-'+i);
-        let nama = row.querySelector('#cell-nama');
-        let nilai = row.querySelector('#cell-nilai');
-        nama.innerHTML = DATA[i][0];
-        nilai.innerHTML = DATA[i][1];
-      }
+        DATA.sort((a, b) => b[1] - a[1]);
+        let last = -1;
+        let peringkatLast = 0;
+        for (let i = 0; i < total && i < DATA.length; i++) {
+            let row = document.querySelector('#row-' + i);
+            let peringkatC = row.querySelector('#cell-peringkat');
+            let nama = row.querySelector('#cell-nama');
+            let nilai = row.querySelector('#cell-nilai');
+            nama.innerHTML = DATA[i][0];
+            nilai.innerHTML = DATA[i][1];
+            let peringkat;
+            if (last == DATA[i][1] || last < 0) {
+                peringkat = peringkatLast;
+            } else {
+                peringkat = peringkatLast++;
+            }
+            last = DATA[i][1];
+            peringkatC.innerHTML = peringkat + 1;
+        }
     }
+
     function getParameterByName(name, url = window.location.href) {
         name = name.replace(/[\[\]]/g, '\\$&');
         var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -101,35 +125,38 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
-  </script>
-  <style>
+</script>
+<style>
     body {
     }
-    .content {
-      margin: 20;
-    }
-    table, th, td {
-      border: 1px solid black;
-    }
-    th, td {
-      padding: 15px;
-    }
-  </style>
-  <body>
-    <h1 class="header">Papan Peringkat Try Out SMAN 1 Banjar</h1>
-    <h3 id="mapel"></h3>
-    <div id="proses"></div>
-    <table id="tabel" class="content">
-      <thead>
-        <tr>
-          <th>Peringkat</th>
-          <th>NIS</th>
-          <th>Skor</th>
-        </tr>
-      </thead>
-      <tbody>
 
-      </tbody>
-    </table>
-  </body>
+    .content {
+        margin: 20px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+</style>
+<body>
+<h1 class="header">Papan Peringkat Try Out SMAN 1 Banjar</h1>
+<h3 id="mapel"></h3>
+<div id="proses"></div>
+<table class="content" id="tabel">
+    <thead>
+    <tr>
+        <th>Peringkat</th>
+        <th>NIS</th>
+        <th>Skor</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</body>
 </html>
