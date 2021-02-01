@@ -5,6 +5,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
+const cache = {};
+
 app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
@@ -22,15 +24,24 @@ app.get('/nilai', (req, res) => {
 	    });
 	    result.on('end', () => {
 	        const resultData = Buffer.concat(chunks).toString();
+	        if (resultData != '--') {
+	            let cached = cache[userid];
+	            if (cached) {
+	                cached[mapel] = resultData;
+	            } else {
+	                cache[userid] = {mapel: resultData}
+	            }
+	        }
+	        res.send(resultData);
 	        console.log(resultData);
 	    });
 	});
 	let formData = querystring.stringify({
                    	    'userid': userid,
-                   	    'mapel': mapel
+                   	    'mapel': mapel,
+                   	    standalone: 1
                    	});
-	request.write('userid=1819X179&mapel=SENI+BUDAYA');
-	console.log('writing', formData);
+	request.write(formData);
 	request.end();
 });
 
