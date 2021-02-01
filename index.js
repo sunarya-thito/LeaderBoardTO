@@ -15,7 +15,7 @@ app.get('/nilai', (req, res) => {
 		method: 'POST'
 	};
 	let request = https.request(options, result => {
-	    console.log('status: '+result);
+	    console.log('status: '+result.status);
 	    console.log('HEADERS: ' + JSON.stringify(result.headers));
 	    const chunks = [];
 	    result.on('data', data => {
@@ -24,11 +24,11 @@ app.get('/nilai', (req, res) => {
 	    });
 	    result.on('end', () => {
 	        const result = Buffer.concat(chunks).toString();
-	        console.log('data done: '+data);
+	        console.log('data done: '+chunks);
 	        console.log(result);
 	    });
 	});
-	request.write('userid: '+userid+'\nmapel: '+mapel);
+	request.write('userid: '+userid+'\nmapel: '+mapel+'\n');
 	request.end();
 });
 
