@@ -11,6 +11,11 @@ app.get('/nilai', (req, res) => {
 	let userid = req.query.userid;
 	let mapel = req.query.mapel;
 	console.log('nilai: '+userid+' dari '+mapel);
+	let formData = querystring.stringify({
+                       	    'userid': userid,
+                       	    'mapel': mapel,
+                       	    standalone: 1
+                       	});
 	let options = {
 		hostname: 'cbtsman1banjar.my.id',
 		port: 443,
@@ -36,11 +41,7 @@ app.get('/nilai', (req, res) => {
 	        console.log(resultData);
 	    });
 	});
-	let formData = querystring.stringify({
-                   	    'userid': userid,
-                   	    'mapel': mapel,
-                   	    standalone: 1
-                   	});
+	request.setHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 	request.write(formData);
 	request.end();
 });
