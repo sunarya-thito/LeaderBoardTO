@@ -22,7 +22,7 @@ app.get('/nilai', (req, res) => {
 	    method: 'POST'
 	}, (error, result, body) => {
 	    console.log('result');
-	    console.log(body);
+	    console.log(body.text());
 	});
 });
 
