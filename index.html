@@ -6,7 +6,9 @@
   <script>
     let data = "https://testtryout.herokuapp.com/nilai";
     function fetchNilai(userid, mapel, callback) {
-      fetch(data + '?userid='+userid+'&mapel='+mapel, {}).then(res => {
+      fetch(data + '?userid='+userid+'&mapel='+mapel, {
+        mode: 'no-cors'
+      }).then(res => {
         res.text().then(text => {
           let temp = document.createElement('temporary');
           temp.innerHTML = text;
