@@ -5,20 +5,35 @@
     </head>
     <script>
         function fetchPelajaran(callback) {
-          fetch('https://testtryout.herokuapp.com/mapel', {})
-          .then(res => res.text())
-          .then(res => {
-            let temp = document.createElement('temporary');
-            temp.innerHTML = res;
-            let mapel = [];
-            for (let i in temp.children) {
-              let child = temp.children[i];
-              if (child.value) {
-                  mapel.push(child.value);
-              }
-            }
-            callback(mapel);
-          });
+            callback([
+                'PENDIDIKAN AGAMA ISLAM',
+                'Bahasa dan Sastra Indonesia',
+                'MATEMATIKA PEMINATAN',
+                'PABP - KATOLIK',
+                'PABP - KHONGUCU',
+                'SEJARAH PEMINATAN',
+                'SENI BUDAYA',
+                'BAHASA DAN SASTRA INGGRIS',
+                'EKONOMI',
+                'FISIKA',
+                'FISIKA 2',
+                'PENJASKES',
+                'PPKn'
+            ]);
+          // fetch('https://testtryout.herokuapp.com/mapel', {})
+          // .then(res => res.text())
+          // .then(res => {
+          //   let temp = document.createElement('temporary');
+          //   temp.innerHTML = res;
+          //   let mapel = [];
+          //   for (let i in temp.children) {
+          //     let child = temp.children[i];
+          //     if (child.value) {
+          //         mapel.push(child.value);
+          //     }
+          //   }
+          //   callback(mapel);
+          // });
         }
 
         let taskController = new AbortController();

@@ -1,8 +1,8 @@
 const express = require('express');
 const querystring = require('querystring');
 const https = require('https');
-const app = express();aaa
-const port = process.env.PORT || aa5000;
+const app = express();
+const port = process.env.PORT || 5000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
 const cache = {};
