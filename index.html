@@ -93,8 +93,10 @@
                         mapelSelector.appendChild(value);
                         mapelSelector.selectedIndex = mapelSelector.options.length - 1;
                     }
-                    next();
+                } else {
+                    mataPelajaran = mapelSelector.options[mapelSelector.selectedIndex].value;
                 }
+                next();
             });
             total = getParameterByName('max');
             if (!total) total = 430;
