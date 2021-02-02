@@ -33,7 +33,7 @@ app.get('/nilai', (req, res) => {
 	let alreadyCached = cache[userid];
 	if (alreadyCached) {
 	    let cachedValue = alreadyCached[mapel];
-	    if (cachedValue) {a
+	    if (cachedValue) {
 	        res.setHeader('Access-Control-Allow-Origin', '*');
             res.send(cachedValue);
 	        return;
