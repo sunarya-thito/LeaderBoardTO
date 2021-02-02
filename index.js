@@ -1,8 +1,8 @@
 const express = require('express');
 const querystring = require('querystring');
 const https = require('https');
-const app = express();
-const port = process.env.PORT || 5000;
+const app = express();aaa
+const port = process.env.PORT || aa5000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
 const cache = {};
@@ -33,7 +33,7 @@ app.get('/nilai', (req, res) => {
 	let alreadyCached = cache[userid];
 	if (alreadyCached) {
 	    let cachedValue = alreadyCached[mapel];
-	    if (cachedValue) {
+	    if (cachedValue) {a
 	        res.setHeader('Access-Control-Allow-Origin', '*');
             res.send(cachedValue);
 	        return;
