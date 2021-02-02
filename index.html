@@ -109,7 +109,6 @@
             DATA = [];
             render();
             taskController.abort();
-            taskController = new AbortController();
             mataPelajaran = mapel;
             if (mataPelajaran) {
                 next();
@@ -117,10 +116,14 @@
         }
 
         function next() {
+            taskController = new AbortController();
+            console.log('Fetching for '+mataPelajaran);
             for (let i = 0; i < 430; i++) {
                 let nis = '1819X' + pad(index, 3);
+                console.log('Fetching '+nis+'...');
                 fetchNilai(nis, mataPelajaran, result => {
                     masukan(nis, result);
+                    console.log('Fetched '+nis+'!');
                     count();
                 });
                 index++;
@@ -165,6 +168,14 @@
                         peringkat = peringkatLast + 1;
                     }
                     peringkatC.innerHTML = peringkat;
+                    row.classList.remove('first-place', 'second-place', 'third-place');
+                    if (peringkat == 1) {
+                        row.classList.add('first-place');
+                    } else if (peringkat == 2) {
+                        row.classList.add('second-place');
+                    } else if (peringkat == 3) {
+                        row.classList.add('third-place');
+                    }
                     last = DATA[i][1];
                     peringkatLast = peringkat;
                     row.classList.remove('invisible-row');
@@ -197,15 +208,15 @@
             font-family: 'Product Sans';
         }
 
-        #tabel tbody tr:nth-child(1) {
+        .first-place {
             background-color: gold;
         }
 
-        #tabel tbody tr:nth-child(2) {
+        .second-place {
             background-color: gray;
         }
 
-        #tabel tbody tr:nth-child(3) {
+        .third-place {
             background-color: saddlebrown;
         }
 
